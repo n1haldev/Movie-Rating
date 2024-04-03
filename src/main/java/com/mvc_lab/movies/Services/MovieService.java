@@ -1,14 +1,19 @@
 package com.mvc_lab.movies.Services;
 
 import com.mvc_lab.movies.Models.Movie;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import com.mvc_lab.movies.Repository.MovieRepo;
 
 @Service
 public class MovieService {
     private final List<Movie> movieList;
+    @Autowired
+    private MovieRepo movieRepo;
     public MovieService() {
          movieList = new ArrayList<>();
          movieList.add(new Movie(1L, "Movie 1", 2022, "Action", "Director 1", 4.5));
@@ -28,9 +33,10 @@ public class MovieService {
     }
 
     public Optional<Movie> findMovieById(Long id) {
+        List<Movie> movies = movieRepo.findAll();
         if(movieList != null) {
             for(Movie movie : movieList) {
-                if(movie.getId() == id) {
+                if(id == movie.getId()) {
                     return Optional.of(movie);
                 }
             }

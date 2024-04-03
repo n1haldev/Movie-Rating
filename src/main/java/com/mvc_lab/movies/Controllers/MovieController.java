@@ -15,6 +15,7 @@ import java.util.List;
 public class MovieController {
     @Autowired
     private MovieService movieService;
+    @Autowired
     private MovieRepo movieRepo;
 
     @GetMapping("/view")
@@ -50,13 +51,13 @@ public class MovieController {
     }
 
     @DeleteMapping("/remove-movie/{id}")
-    public ResponseEntity<String> removeMovie(@PathVariable Long id) {
+    public ResponseEntity<String> removeMovie(@PathVariable("id") Long id) {
         try {
             if(!movieService.findMovieById(id).isPresent()) {
                 return ResponseEntity.ok("The movie to be removed is not present in the list!");
             }
             movieService.removeMovie(id);
-
+//            movieRepo.deleteById(id);
             return ResponseEntity.ok("The movie was removed from the list successfully!");
         }
         catch(Exception e) {
@@ -65,7 +66,10 @@ public class MovieController {
     }
 
     @GetMapping("/")
-    public String frontend() {
+    public String home() {
         return "movies";
     }
+
+    @GetMapping("update-list")
+    public String updateListPage() { return "updatelist"; }
 }
